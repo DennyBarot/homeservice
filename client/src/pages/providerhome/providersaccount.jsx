@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Providernavbar from "./providernavbar";
-import axios from "axios";
+// import axios from "axios";
 import { axiosInstance } from "../../components/utilities/axiosInstance";
 import { getTokenFromCookie } from "../../components/utilities/getTokenFromCookie";
-import useUserStore from "../../store.js";
+// import useUserStore from "../../store.js";
 
 const AccountPage = () => {
   const [user, setUser] = useState(null);
