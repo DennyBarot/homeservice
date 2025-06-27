@@ -7,7 +7,6 @@ import useUserStore from '../../store.js';
 import DateSeparator from "../../components/utilities/DateSeparator.jsx";
 import { format, isToday, isTomorrow, parseISO } from "date-fns";
  
-
 const MessagePageforProvider = () => {
   const messageRef = useRef(null);
   // const messagesEndRef = useRef(null); // add ref for scrolling
@@ -16,7 +15,6 @@ const MessagePageforProvider = () => {
   const [messages, setMessages] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const socket = useUserStore((state) => state.socket);
   const userProfile = useUserStore((state) => state.userProfile);
 
@@ -81,7 +79,7 @@ const MessagePageforProvider = () => {
     }
   }, [messages]);
 
-  // Helper to get date label for a message date
+  //  date label for a message date
   const getDateLabel = (dateString) => {
     const date = parseISO(dateString);
     if (isToday(date)) return "Today";

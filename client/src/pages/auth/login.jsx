@@ -30,7 +30,7 @@ const Login = () => {
       password: loginData.password.trim(),
     };
     await loginUser(trimmedData);
-    // Navigation will be handled by useEffect based on isAuthenticated and userProfile
+    
   };
 
   useEffect(() => {

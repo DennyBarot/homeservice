@@ -1,5 +1,4 @@
 import React from "react";
-
 const DateSeparator = ({ label }) => {
   return (
     <div className="flex justify-center my-4">

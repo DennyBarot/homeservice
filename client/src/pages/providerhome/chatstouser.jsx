@@ -15,7 +15,7 @@ const ChatListPage = () => {
       try {
         const response = await axiosInstance.get('/conversations');
         if (response.data.success) {
-          // Sort conversations by last message timestamp (newest first)
+          // Sort conversations by last message timestamp 
           const sortedConversations = response.data.responseData.sort((a, b) => {
             const lastMsgA = getLastMessageTimestamp(a);
             const lastMsgB = getLastMessageTimestamp(b);
