@@ -163,8 +163,7 @@ const MessagePageforProvider = () => {
         )}
         <div ref={messageRef} />
       </div>
-
-      {/* Show SendMessage component when not loading */}
+      
       {!loading && (
         <SendMessage
           receiverId={selectedUser?._id || ""}
