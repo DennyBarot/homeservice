@@ -1,5 +1,4 @@
 import React from 'react'
-
 import Providernavbar from './providernavbar.jsx'
 const Providerhome = () => {
   return (
@@ -32,8 +31,7 @@ const Providerhome = () => {
               </a>
             </div>
           </div>
-
-          {/* Image Section */}
+        
           <div className="relative">
             <img
               src="https://smarther.co/wp-content/uploads/2021/07/home-service-app-enterprises-blog.png"

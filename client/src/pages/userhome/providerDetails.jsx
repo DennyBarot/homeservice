@@ -18,7 +18,6 @@ const ProviderDetails = () => {
   const [showRatingModal, setShowRatingModal] = React.useState(false);
   const [userRating, setUserRating] = React.useState(null);
 
-  // Booking modal state and form fields
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [bookingDate, setBookingDate] = useState('');
   const [bookingTime, setBookingTime] = useState('');

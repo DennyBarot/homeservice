@@ -12,8 +12,8 @@ const Providernavbar = () => {
 
   const handleLogout = async () => {
     try {
-      await logoutUser(); // Call the logout function from your store
-      window.location.href = '/login'; // Redirect to the homepage or login page after logout
+      await logoutUser(); 
+      window.location.href = '/login'; 
     } catch (error) {
       console.error("Logout error:", error);
     }

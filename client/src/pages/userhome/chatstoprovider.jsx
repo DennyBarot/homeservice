@@ -10,14 +10,12 @@ const Chatstoprovider = () => {
   const socket = useUserStore((state) => state.socket);
   const [conversations, setConversations] = useState([]);
 
-  // Helper: Return raw Date object for sorting
   const getLastMessageTimestamp = (conversation) => {
     if (!conversation.messages || conversation.messages.length === 0) return new Date(0);
     const lastMsg = conversation.messages[conversation.messages.length - 1];
     return new Date(lastMsg.createdAt);
   };
 
-  // Helper: Return formatted time string for display
   const formatLastMessageTime = (conversation) => {
     if (!conversation.messages || conversation.messages.length === 0) return '';
     const lastMsg = conversation.messages[conversation.messages.length - 1];
@@ -46,12 +44,12 @@ const Chatstoprovider = () => {
     }
   }, [userProfile]);
 
-  // Refetch conversations function to refresh unread counts
+
   const fetchConversations = async () => {
     try {
       const response = await axiosInstance.get('/conversations');
       if (response.data.success) {
-        // Sort conversations by last message timestamp (newest first)
+      
         const sortedConversations = response.data.responseData.sort((a, b) => {
           const lastMsgA = getLastMessageTimestamp(a);
           const lastMsgB = getLastMessageTimestamp(b);
@@ -64,7 +62,7 @@ const Chatstoprovider = () => {
     }
   };
 
-  // Call fetchConversations on mount and after marking messages read
+
   useEffect(() => {
     if (userProfile) {
       fetchConversations();
@@ -98,7 +96,7 @@ const Chatstoprovider = () => {
           const updatedConversations = [...prevConversations];
           const conversation = updatedConversations[conversationIndex];
           conversation.messages.push(newMessage);
-          // Sort conversations by last message timestamp
+        
           updatedConversations.sort((a, b) => {
             const lastMsgA = getLastMessageTimestamp(a);
             const lastMsgB = getLastMessageTimestamp(b);

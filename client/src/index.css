@@ -7,16 +7,3 @@
 /* Force light theme by overriding dark mode media query */
 @media (prefers-color-scheme: dark) {
     :root {
-      color-scheme: light !important;
-      background-color: white !important;
-    }
-    body, html {
-      background-color: white !important;
-      color: black !important;
-    }
-    /* Override DaisyUI dark mode styles */
-    .dark {
-      all: unset !important;
-    }
-  }
-  
