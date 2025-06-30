@@ -80,7 +80,7 @@ const ChatListPage = () => {
     return conversation.messages[conversation.messages.length - 1].message;
   };
 
-  // Return raw Date object for sorting
+
   const getLastMessageTimestamp = (conversation) => {
     if (!conversation.messages || conversation.messages.length === 0) return new Date(0);
     const lastMsg = conversation.messages[conversation.messages.length - 1];
@@ -103,7 +103,7 @@ const ChatListPage = () => {
     if (profileImage.startsWith('http') || profileImage.startsWith('https')) {
       return profileImage;
     }
-    // Remove leading slash if present to avoid double slash in URL
+   
     const normalizedPath = profileImage.startsWith('/') ? profileImage.substring(1) : profileImage;
     return `http://localhost:5000/${normalizedPath}`;
   };
