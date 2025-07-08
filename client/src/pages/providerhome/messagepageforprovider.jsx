@@ -177,7 +177,7 @@ const MessagePageforProvider = () => {
               return <DateSeparator key={item.id} label={item.label} />;
             } else if (item.type === "message") {
               const msg = item.messageDetails;
-              const isOwnMessage = msg.senderId !== selectedUser?._id; // assuming senderId, adjust if needed
+              const isOwnMessage = msg.senderId !== selectedUser?._id;
               return (
                 <div
                   key={item.id}
