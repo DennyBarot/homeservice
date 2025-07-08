@@ -29,7 +29,7 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
         conversation = new Conversation({
             participants: [senderId, receiverId],
         });
-        await conversation.save(); // Save the new conversation
+        await conversation.save();
     }
 
     const newMessage = await Message.create({
@@ -38,18 +38,13 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
         message,
     });
 
-    const createdAt = newMessage.createdAt; // Capture the createdAt timestamp
+    const createdAt = newMessage.createdAt;
 
     if (newMessage) {
         conversation.messages.push(newMessage._id);
 
-        // Increment unread count for receiver
-        const unreadCountEntry = conversation.unreadCounts.find(uc => uc.userId.toString() === receiverId.toString());
-        if (unreadCountEntry) {
-            unreadCountEntry.count += 1;
-        } else {
-            conversation.unreadCounts.push({ userId: receiverId, count: 1 });
-        }
+        
+      
 
         await conversation.save();
     }
@@ -72,7 +67,8 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
 export const getMessages = asyncHandler(async (req, res, next) => {
     const myId = req.user._id;
     const otherParticipantId = req.params.otherParticipantId;
-
+    const limit = parseInt(req.query.limit) || 20;
+    const before = req.query.before;
 
     if (!myId || !otherParticipantId) {
         return next(new errorHandler("All fields are required", 400));
@@ -80,7 +76,44 @@ export const getMessages = asyncHandler(async (req, res, next) => {
 
     let conversation = await Conversation.findOne({
         participants: { $all: [myId, otherParticipantId] },
-    }).populate("messages").populate({
+    });
+
+    if (!conversation) {
+        return res.status(200).json({
+            success: true,
+            responseData: {
+                messages: [],
+                participants: [],
+                currentUserId: myId,
+                _id: null,
+            },
+        });
+    }
+
+    // Fetch messages with pagination
+    let messageQuery = Message.find({
+        _id: { $in: conversation.messages },
+    });
+
+    if (before) {
+        // Find messages created before the 'before' message's createdAt
+        const beforeMessage = await Message.findById(before);
+        if (beforeMessage) {
+            messageQuery = messageQuery.where('createdAt').lt(beforeMessage.createdAt);
+        }
+    }
+
+    const messages = await messageQuery
+        .sort({ createdAt: -1 })
+        .limit(limit)
+        .populate('senderId', 'name profileImage')
+        .exec();
+
+    // Reverse to ascending order for display
+    const messagesAsc = messages.reverse();
+
+    // Populate participants
+    await conversation.populate({
         path: "participants",
         select: "name profileImage"
     });
@@ -88,8 +121,10 @@ export const getMessages = asyncHandler(async (req, res, next) => {
     res.status(200).json({
         success: true,
         responseData: {
-            ...conversation.toObject(),
-            currentUserId: myId
+            messages: messagesAsc,
+            participants: conversation.participants,
+            currentUserId: myId,
+            _id: conversation._id,
         },
     });
 });
@@ -126,38 +161,39 @@ export const getConversations = asyncHandler(async (req, res, next) => {
     });
 });
 
-export const markMessagesRead = asyncHandler(async (req, res, next) => {
-    const userId = req.user._id;
-    const { conversationId } = req.body;
+// export const markMessagesRead = asyncHandler(async (req, res, next) => {
+//     const userId = req.user._id;
+//     const { conversationId } = req.body;
 
-    if (!userId || !conversationId) {
-        return next(new errorHandler("User ID and conversation ID are required", 400));
-    }
+//     if (!userId || !conversationId) {
+//         return next(new errorHandler("User ID and conversation ID are required", 400));
+//     }
 
-    // Find messages in the conversation where userId is not in readBy
-    const messagesToUpdate = await Message.find({
-        _id: { $in: (await Conversation.findById(conversationId)).messages },
-        readBy: { $ne: userId }
-    });
+//     // Find messages in the conversation where userId is not in readBy
+//     const messagesToUpdate = await Message.find({
+//         _id: { $in: (await Conversation.findById(conversationId)).messages },
+//         readBy: { $ne: userId }
+//     });
 
-    // Update readBy for these messages
-    await Promise.all(messagesToUpdate.map(async (msg) => {
-        msg.readBy.push(userId);
-        await msg.save();
-    }));
+  
+//     await Promise.all(messagesToUpdate.map(async (msg) => {
+//         msg.readBy.push(userId);
+//         await msg.save();
+//     }));
 
-    // Reset unread count for user in conversation
-    const conversation = await Conversation.findById(conversationId);
-    if (conversation) {
-        const unreadCountEntry = conversation.unreadCounts.find(uc => uc.userId.toString() === userId.toString());
-        if (unreadCountEntry) {
-            unreadCountEntry.count = 0;
-            await conversation.save();
-        }
-    }
+  
+//     const conversation = await Conversation.findById(conversationId);
+//     if (conversation) {
+//         const unreadCountEntry = conversation.unreadCounts.find(uc => uc.userId.toString() === userId.toString());
+//         if (unreadCountEntry) {
+//             unreadCountEntry.count = 0;
+//             await conversation.save();
+//         }
+//     }
 
-    res.status(200).json({
-        success: true,
-        message: "Messages marked as read and unread count reset",
-    });
-});
+//     res.status(200).json({
+//         success: true,
+//         message: "Messages marked as read and unread count reset",
+//     });
+// });
+// // 

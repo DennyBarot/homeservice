@@ -50,7 +50,14 @@ const UserAccount = () => {
     setLoading(true);
     setMessage("");
     try {
-      await updateUserProfile(formData);
+      const data = new FormData();
+      data.append('name', formData.name);
+      data.append('gender', formData.gender);
+      data.append('age', formData.age);
+      if (formData.profileImageFile) {
+        data.append('profileImage', formData.profileImageFile);
+      }
+      await updateUserProfile(data);
       setMessage("Profile updated successfully!");
     } catch (error) {
       setMessage("Error updating profile.");

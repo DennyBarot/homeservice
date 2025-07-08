@@ -73,7 +73,7 @@ const initializeSocket = (server) => {
             io.to(receiverSocketId).emit("newMessage", messageToSend);
           }
 
-          // Acknowledge sender
+       
           if (callback) {
             callback({ success: true, message: messageToSend });
           }

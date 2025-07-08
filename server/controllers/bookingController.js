@@ -24,7 +24,7 @@ export const  createBooking = async (req, res) => {
   }
 };
 
-// Get bookings for provider with optional status filter
+// Get bookings for provider 
 export const getBookingsByProvider = async (req, res) => {
   try {
     const providerId = req.user._id;

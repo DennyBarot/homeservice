@@ -24,7 +24,7 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    // Trim email and password before sending
+   
     const trimmedData = {
       email: loginData.email.trim(),
       password: loginData.password.trim(),

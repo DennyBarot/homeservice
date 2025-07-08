@@ -2,14 +2,13 @@ import jwt from 'jsonwebtoken';
 
 export const isAuthenticated = (async (req, res, next) => {
   const token = req.cookies.token || req.headers["authorization"]?.replace("Bearer ", "");
-  console.log("Token received in authenticate middleware:", token); // Log the token for debugging
+  console.log("Token received in authenticate middleware:", token); 
   
   if (!token) {
     console.log("No token found in request");
     return res.status(401).json({ errMessage: "Not authorized" });
   }
-  
-  // Verify the token and handle errors
+
   let tokenData;
   try {
     tokenData = jwt.verify(token, process.env.JWT_SECRET);
