@@ -1,0 +1,120 @@
+npm create vite@latest . -- --template react
+
+npm install -D tailwindcss@3 postcss autoprefixer
+npx tailwindcss init -p
+
+replace tailwind.config.js with this
+content: [
+    "./index.html",
+    "./src//*.{js,ts,jsx,tsx}",
+  ],
+
+
+  in Index.css
+
+  @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+if by chance error occurs then create ErrorBoundary.jsx
+import './App.css';
+import React, { useState } from 'react';
+import ErrorBoundary from './ErrorBoundary';
+
+function App() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <ErrorBoundary>
+      <>
+        <h1>Counter</h1>
+        <p>{count}</p>
+        <button onClick={() => setCount(count + 1)}>Increment</button>
+      </>
+    </ErrorBoundary>
+  );
+}
+
+export default App;
+
+npm i -D daisyui@latest
+in tailwind.config.js
+plugins: [
+    require('daisyui'),
+  ],
+
+
+
+npm install react-router-dom  @reduxjs/toolkit
+npm install react-redux
+npm install @reduxjs/toolkit
+
+
+in index.js
+import { store } from './app/store'
+import { Provider } from 'react-redux'
+
+ <Provider store={store}>
+
+ in store.js
+import { configureStore } from '@reduxjs/toolkit'
+import counterReducer from '../features/counter/counterSlice'
+
+export const store = configureStore({
+  reducer: {
+    counter: counterReducer,
+  },
+})
+
+in file you have to apply before
+
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { decrement, increment } from './counterSlice'
+
+export function Counter() {
+  const count = useSelector((state) => state.counter.value)
+  const dispatch = useDispatch()
+
+  return (
+    <div>
+      <div>
+        <button
+          aria-label="Increment value"
+          onClick={() => dispatch(increment())}
+        >
+          Increment
+        </button>
+        <span>{count}</span>
+        <button
+          aria-label="Decrement value"
+          onClick={() => dispatch(decrement())}
+        >
+          Decrement
+        </button>
+      </div>
+    </div>
+  )
+}
+
+make an store.js 
+
+import { configureStore } from '@reduxjs/toolkit'
+
+export const store = configureStore({
+  reducer: {},
+})
+export default store;
+
+in main.jsx 
+import { store } from './app/store'
+import { Provider } from 'react-redux'
+
+
+
+
+<Provider store={store}>
+      <App />
+    </Provider>,
+
+    
